@@ -6,34 +6,19 @@ import java.util.Properties;
 
 public class ConfigurationReader {
 
-    private static Properties properties = new Properties();
+    private static Properties properties;
 
-    static { //only running once before everything else
-
-        //2- get the path and store in String, or directly pass into fileInputStream obj
-        String path = "configuration.properties";
-
-
-        try {
-            //3- we need to open the file
-            FileInputStream file = new FileInputStream(path);
+    static {
+        try (FileInputStream fileInputStream = new FileInputStream("configuration.properties")) {
             properties = new Properties();
-            properties.load(file);
-
-            //5- close.file
-            file.close();
-
+            properties.load(fileInputStream);
         } catch (IOException e) {
             e.printStackTrace();
-            throw new RuntimeException("Unable to find configuration.properties");
-
+            throw new RuntimeException("Unable to find configuration.properties file!");
         }
     }
 
     public static String getProperty(String key) {
-
         return properties.getProperty(key);
     }
-
-
 }
